@@ -1,2 +1,2 @@
 # Camera-calibration
-This project aim to achieve a robot navigation
+This project aims to achieve robot navigation
