@@ -13,7 +13,7 @@ def cv_show(img,name='Figure'):
     cv.destroyAllWindows()
 
 
-Path1 = 'F:\PyCharm\Camera calibration\class1'
+Path1 = 'F:\PyCharm\Camera_calibration_GIT\class1'
 
 
 
@@ -24,7 +24,7 @@ a = np.prod(chessboard_size)
 objp = np.zeros((np.prod(chessboard_size), 3), dtype=np.float32)
 # 通过np.mgrid生成对象的xy坐标点，每个棋盘格大小是18mm
 # 最终得到z=0的objp为(0,0,0), (1*13,0,0), (2*13,0,0) ,...
-objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2) * 18
+objp[:, :2] = np.mgrid [0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2) * 18
 
 # print("object is %f", objp)
 
@@ -111,7 +111,7 @@ dst = cv.undistort(img2, mtx, dist, None, newCameraMtx)
 x,y,w,h = roi
 dst = dst[y:y+h, x:x+w]
 cv_show(dst)
-cv.imwrite(r'F:\PyCharm\Camera calibration\Camera calibration\Calibresult5.jpg', dst)
+cv.imwrite(r'F:\PyCharm\Camera_calibration_GIT\Camera calibration\Calibresult5.jpg', dst)
 
 
 
@@ -226,7 +226,7 @@ for fname in images:
         imgpts, jac = cv.projectPoints(axis, rvecs, tvecs, mtx, dist)
         # 把坐标显示图片上
         img = draw(img, corners, imgpts)
-        cv.imwrite(r"F:\PyCharm\Camera calibration\3d_2d_project\3d_2d_project5.jpg",img)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\3d_2d_project\3d_2d_project5.jpg",img)
         cv_show(img)
 
 

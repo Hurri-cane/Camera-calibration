@@ -9,7 +9,7 @@ def cv_show(img,name='Figure'):
     cv.waitKey(0)
     cv.destroyAllWindows()
 
-with np.load(r'F:\PyCharm\Camera calibration\class1\class_mtx.npz') as X:
+with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
 
@@ -45,13 +45,13 @@ while (flag):
             aruco.drawDetectedMarkers(frame, corners)
         cv.putText(frame, "Id: " + str(ids.T), (50, 80), font, 2, (0, 255, 0), 2, cv.LINE_AA)
         # cv.putText(warped, "{:.1f}".format(score), (10, 30),cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
-        print(str(ids))
+        # print(str(ids))
     else:
         cv.putText(frame, "No Ids", (50, 80), font, 2, (0, 0, 255), 3, cv.LINE_AA)
     cv.imshow("Capture_Paizhao", frame)
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera calibration\video collection\Aruco test\0" + str(index) + ".jpg", frame)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")

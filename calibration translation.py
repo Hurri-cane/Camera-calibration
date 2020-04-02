@@ -4,7 +4,7 @@
 import cv2 as cv
 import  numpy as np
 
-with np.load(r'F:\PyCharm\Camera calibration\class1\class_mtx.npz') as X:
+with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 zero = np.array([[0,0,0]],float).T
 mtx = np.concatenate((mtx, zero), axis=1)

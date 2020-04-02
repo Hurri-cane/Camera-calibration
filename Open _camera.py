@@ -16,7 +16,7 @@ while (flag):
     # print(cap.get(3),cap.get(4))
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera calibration\class1\0" + str(index) + ".jpg", frame)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\class3\0" + str(index) + ".jpg", frame)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")
