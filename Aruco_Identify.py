@@ -42,7 +42,7 @@ while (flag):
 
         for i in range(rvec.shape[0]):
             aruco.drawAxis(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], 0.076)
-            aruco.drawDetectedMarkers(frame, corners)
+            aruco.drawDetectedMarkers(frame, corners,ids,(0, 179, 255))
         cv.putText(frame, "Id: " + str(ids.T), (50, 80), font, 2, (0, 255, 0), 2, cv.LINE_AA)
         # cv.putText(warped, "{:.1f}".format(score), (10, 30),cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
         # print(str(ids))
@@ -51,7 +51,7 @@ while (flag):
     cv.imshow("Capture_Paizhao", frame)
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame_copy)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")
