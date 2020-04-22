@@ -1,3 +1,6 @@
+#*********************************************************************#
+#*                           By Huang Wenjun                         *#
+#*********************************************************************#
 import cv2 as cv
 import  numpy as np
 import glob
@@ -46,7 +49,7 @@ for image_path in tqdm(calibration_paths):
     # ratio = y/x
     # img = cv.resize(img, (int(750*ratio),750))
     # 图像二值化
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    gray = cv.cvtColor(img, cv. COLOR_BGR2GRAY)
     # cv_show(gray)
     # 找到棋盘格内角点位置
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)

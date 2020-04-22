@@ -1,8 +1,16 @@
+#*********************************************************************#
+#*                           By Huang Wenjun                         *#
+#*********************************************************************#
 import cv2 as cv
 import cv2.aruco as aruco
 import  numpy as np
+from math import degrees as dg
 
-
+def cv_show(img,name='Figure'):
+    cv.namedWindow(name,cv.WINDOW_AUTOSIZE)
+    cv.imshow(name,img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]

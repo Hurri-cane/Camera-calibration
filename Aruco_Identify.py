@@ -1,6 +1,11 @@
+#*********************************************************************#
+#*                           By Huang Wenjun                         *#
+#*********************************************************************#
 import cv2 as cv
 import cv2.aruco as aruco
 import  numpy as np
+
+
 
 
 def cv_show(img,name='Figure'):
@@ -51,7 +56,7 @@ while (flag):
     cv.imshow("Capture_Paizhao", frame)
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame_copy)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")
