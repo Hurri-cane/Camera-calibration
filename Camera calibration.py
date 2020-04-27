@@ -41,6 +41,7 @@ criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # 读取目录下的所有图片
 calibration_paths = glob.glob(Path1+'\*.jpg')
 
+useful_img = 0
 # 为方便显示使用tqdm显示进度条
 for image_path in tqdm(calibration_paths):
     # 读取图片
@@ -63,9 +64,10 @@ for image_path in tqdm(calibration_paths):
         # 在图中标注角点,方便查看结果
         img = cv.drawChessboardCorners(img, chessboard_size, corners2, ret)
         # img = cv.resize(img, (400,600))
-        cv_show(img)
+        useful_img+=1
+        # cv_show(img)
 
-print("finish all the pic count")
+print("finish all the pic count, useful image amount to ",useful_img)
 
 
 # 相机标定
@@ -88,7 +90,7 @@ np.savez(Path1+'\class_mtx.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs) #
 # mtx_mat_T = mtx_mat.I
 # #定义像素坐标系中的点
 # point1_uv = np.mat([20,30,1])
-# point1_xy = np.dot(mtx_mat_T,point1_uv.T)
+# point1_xy = np.dot(mtx_mat_T,point1_uv. T)
 # print(point1_xy)
 
 

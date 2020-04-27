@@ -7,13 +7,6 @@ import  numpy as np
 
 
 
-
-def cv_show(img,name='Figure'):
-    cv.namedWindow(name,cv.WINDOW_AUTOSIZE)
-    cv.imshow(name,img)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
 with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
@@ -21,8 +14,8 @@ with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
 
 print("#######加载相机内参和畸变矩阵#######")
 print(mtx, '\n\n', dist)
-index = 0
-cap = cv.VideoCapture(1,cv.CAP_DSHOW)  #更改API设置
+index = 7
+cap = cv.VideoCapture(0,cv.CAP_DSHOW)  #更改API设置
 flag = cap.isOpened()
 cap.set(3, 1280)
 cap.set(4, 720)
@@ -56,7 +49,7 @@ while (flag):
     cv.imshow("Capture_Paizhao", frame)
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\video collection\Aruco test\0" + str(index) + ".jpg", frame)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\class4\0" + str(index) + ".jpg", frame_copy)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")

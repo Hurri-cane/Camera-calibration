@@ -8,7 +8,7 @@ import  numpy as np
 
 # --------------------------------------------------------
 # 打开摄像头
-cap = cv.VideoCapture(1,cv.CAP_DSHOW)  #更改API设置
+cap = cv.VideoCapture(0,cv.CAP_DSHOW)  #更改API设置
 flag = cap.isOpened()
 cap.set(3, 1280)
 cap.set(4, 720)
@@ -59,7 +59,7 @@ while (flag):
     # print(cap.get(3),cap.get(4))
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
-        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\class3\0" + str(index) + ".jpg", frame_save)
+        cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\class1\0" + str(index) + ".jpg", frame_save)
         print(cap.get(3))
         print(cap.get(4))
         print("save" + str(index) + ".jpg successfuly!")
