@@ -14,14 +14,13 @@ with np.load(r'F:\PyCharm\Camera_calibration_GIT\class1\class_mtx.npz') as X:
 
 print("#######加载相机内参和畸变矩阵#######")
 print(mtx, '\n\n', dist)
-index = 7
+index = 0
 cap = cv.VideoCapture(0,cv.CAP_DSHOW)  #更改API设置
 flag = cap.isOpened()
 cap.set(3, 1280)
 cap.set(4, 720)
 while (flag):
     ret, frame = cap.read()
-    # frame = cv.flip(frame, 1)  # 水平翻转
     frame_copy = frame.copy()
 # else:
 #     frame = cv.imread(r'F:\PyCharm\Camera calibration\video collection\collection_2\03.jpg')
