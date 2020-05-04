@@ -4,6 +4,8 @@
 import cv2 as cv
 import cv2.aruco as aruco
 import  numpy as np
+from math import degrees as dg
+import math
 
 
 
@@ -12,6 +14,33 @@ def cv_show(frame,name='Figure'):
     cv.imshow(name,frame)
     cv.waitKey(0)
     cv.destroyAllWindows()
+
+def isRotationMatrix(R):
+    Rt = np.transpose(R)  # 旋转矩阵R的转置
+    shouldBeIdentity = np.dot(Rt, R)  # R的转置矩阵乘以R
+    I = np.identity(3, dtype=R.dtype)  # 3阶单位矩阵
+    n = np.linalg.norm(I - shouldBeIdentity)  # np.linalg.norm默认求二范数
+    return n < 1e-6  # 目的是判断矩阵R是否正交矩阵（旋转矩阵按道理须为正交矩阵，如此其返回值理论为0）
+
+
+def rotationMatrixToAngles(R):
+    assert (isRotationMatrix(R))  # 判断是否是旋转矩阵（用到正交矩阵特性）
+
+    sy = math.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[
+        1, 0])  # 矩阵元素下标都从0开始（对应公式中是sqrt(r11*r11+r21*r21)），sy=sqrt(cosβ*cosβ)
+
+    singular = sy < 1e-6  # 判断β是否为正负90°
+
+    if not singular:  # β不是正负90°
+        x = math.atan2(R[2, 1], R[2, 2])
+        y = math.atan2(-R[2, 0], sy)
+        z = math.atan2(R[1, 0], R[0, 0])
+    else:  # β是正负90°
+        x = math.atan2(-R[1, 2], R[1, 1])
+        y = math.atan2(-R[2, 0], sy)  # 当z=0时，此公式也OK，上面图片中的公式也是OK的
+        z = 0
+
+    return np.array([x, y, z])
 
 aruco_size = 0.076
 
@@ -62,11 +91,14 @@ while (flag):
         for i in range(rvec.shape[0]):
             aruco.drawAxis(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], aruco_size)
             aruco.drawDetectedMarkers(frame, corners, ids, (0, 179, 255))
-        cv.putText(frame, "Id: " + str(ids.T), (50, 80), font, 2, (0, 255, 0), 2, cv.LINE_AA)
+        cv.putText(frame, "Id: " + str(ids.T), (50, 80), font, 2, (0, 0, 255), 2, cv.LINE_AA)
 
         markerCenter = []
+        sita_z = None
     ###计算位置
         for j in range(len(rvec)):
+
+
 
             # 方法一：采用aruco码的平移矩阵和旋转矩阵计算
             ##此处采用的是相机在Marker坐标系的坐标
@@ -94,7 +126,7 @@ while (flag):
             location1 = tuple(corners[j][0][0])
             # b = (200,200)
             # print(a)
-            cv.putText(frame, "Id: " + str(ids[j]) + str([Xc,Yc,Zc]), location1, font, 1, (0, 255, 0), 2, cv.LINE_AA)
+            cv.putText(frame, "Id: " + str(ids[j]) + 'solution1'+str([Xc,Yc,Zc]), location1, font, 1, (0, 255, 0), 2, cv.LINE_AA)
 
 
             # 方法二：采用aruco码的平corners的点计算
@@ -106,9 +138,15 @@ while (flag):
             Yw = Zc*(uv_point[1]-mtx[1][2])/mtx[1][1]
             Zw = Zc
             location2 = tuple(corners[j][0][2])
-            cv.putText(frame, "Id: "+ str([int(Xw), int(Yw), int(Zw)]), location2, font, 1, (255, 0, 0), 2, cv.LINE_AA)
+            cv.putText(frame, "Id: "+ str(ids[j]) +  'solution2'+ str([int(Xw), int(Yw), int(Zw)]), location2, font, 1, (255, 0, 0), 2, cv.LINE_AA)
 
-
+            # 计算转角：
+            R, _ = cv.Rodrigues(rvec[j])
+            [Rx,Ry,Rz]=rotationMatrixToAngles(R)
+            sita_z = dg(Rz)
+            sita_z = np.round(sita_z,2)
+            location3 = tuple(corners[j][0][1])
+            cv.putText(frame,  'Rotation' + str(sita_z), location3, font, 1,(0, 0, 255), 2, cv.LINE_AA)
 
             #仅存在两个aruco码时，进行距离计算
             if len(rvec) == 2:
