@@ -63,6 +63,9 @@ rvec = None
 tvec = None
 point1 = None
 point2 = None
+Distance_1 = []
+Distance_2 = []
+Rz = []
 # zero = np.array([[0, 0, 0]], float).T
 # mtx_comb = np.concatenate((mtx, zero), axis=1)
 # mtx_comb = np.mat(mtx_comb)
@@ -119,14 +122,13 @@ while (flag):
             Zc = int(Zc)
 
 
-
             print('\n', "-------------------------")
             print("Id: " + str(ids[j]) + '坐标为：')
             print('Xc=', Xc, 'mm', 'Yc=', Yc, 'mm', 'Zc=', Zc, 'mm')
             location1 = tuple(corners[j][0][0])
             # b = (200,200)
             # print(a)
-            cv.putText(frame, "Id: " + str(ids[j]) + 'solution1'+str([Xc,Yc,Zc]), location1, font, 1, (0, 255, 0), 2, cv.LINE_AA)
+            # cv.putText(frame, "Id: " + str(ids[j]) + 'solution1'+str([Xc,Yc,Zc]), location1, font, 1, (0, 255, 0), 2, cv.LINE_AA)
 
 
             # 方法二：采用aruco码的平corners的点计算
@@ -136,17 +138,22 @@ while (flag):
             # Zc = 1000
             Xw = Zc*(uv_point[0]-mtx[0][2])/mtx[0][0]
             Yw = Zc*(uv_point[1]-mtx[1][2])/mtx[1][1]
-            Zw = Zc
+            Zw = 1745
             location2 = tuple(corners[j][0][2])
-            cv.putText(frame, "Id: "+ str(ids[j]) +  'solution2'+ str([int(Xw), int(Yw), int(Zw)]), location2, font, 1, (255, 0, 0), 2, cv.LINE_AA)
+            # cv.putText(frame, "Id: "+ str(ids[j])+ 'solution2' + str([int(Xw), int(Yw), int(Zw)]), location2, font, 1, (255, 0, 0), 2, cv.LINE_AA)
 
             # 计算转角：
             R, _ = cv.Rodrigues(rvec[j])
             [Rx,Ry,Rz]=rotationMatrixToAngles(R)
+            sita_x = dg(Rx)
+            sita_y = dg(Ry)
             sita_z = dg(Rz)
-            sita_z = np.round(sita_z,2)
+            sita_x = np.round(sita_x, 2)
+            sita_y = np.round(sita_y, 2)
+            sita_z = np.round(sita_z, 2)
+            print('Rx=',sita_x,'Ry=',sita_y,'Rz=',sita_z)
             location3 = tuple(corners[j][0][1])
-            cv.putText(frame,  'Rotation' + str(sita_z), location3, font, 1,(0, 0, 255), 2, cv.LINE_AA)
+            # cv.putText(frame,  'Rotation' + str(sita_z), location3, font, 1,(0, 0, 255), 2, cv.LINE_AA)
 
             #仅存在两个aruco码时，进行距离计算
             if len(rvec) == 2:
@@ -155,9 +162,10 @@ while (flag):
                     point1 = np.mat([Xc ,Yc ,Zc])
                 if j == 1:
                     point2 = np.mat([Xc ,Yc ,Zc])
-                    distance = np.sqrt((point1-point2)*((point1-point2).T))
-                    distance = int(distance)
-                    cv.putText(frame, "Distance: "+str(distance), (50, 200), font, 1, (0, 0, 255), 2, cv.LINE_AA)
+                    distance_Mt = np.sqrt((point1-point2)*((point1-point2).T))
+                    distance_Mt = int(distance_Mt)
+                    Distance_1.append(distance_Mt)
+                    cv.putText(frame, "Distance: "+str(distance_Mt), (50, 200), font, 1, (0, 0, 255), 2, cv.LINE_AA)
 
 
                 #方法二：采用aruco码的平corners的点计算（仅含有两个标识）
@@ -173,16 +181,17 @@ while (flag):
                     # C_point2 = corners[1][0][2]
                     # print(C_point1,C_point2)
                     # distance_pix = np.sqrt((C_point1[0]-C_point2[0])**2+(C_point1[1]-C_point2[1])**2)
-                    distance_m = distance_pix*Zc/mtx[0][0]
-                    distance = int(distance_m)
-                    cv.putText(frame, "Corners distance: " + str(distance), (50, 300), font, 1, (0, 0, 255), 2, cv.LINE_AA)
+                    distance_Co = distance_pix*Zc/mtx[0][0]
+                    distance_Co = int(distance_Co)
+                    Distance_2.append(distance_Co)
+                    cv.putText(frame, "Corners distance: " + str(distance_Co), (50, 300), font, 1, (0, 0, 255), 2, cv.LINE_AA)
 
 
 
     else:
         cv.putText(frame, "No Ids", (50, 80), font, 2, (0, 0, 255), 3, cv.LINE_AA)
 
-    cv.imshow("Capture_Paizhao", frame)
+    cv.imshow("Capture_video", frame)
     k = cv.waitKey(1) & 0xFF
     if k == ord('s'):  # 按下s键，进入下面的保存图片操作
         cv.imwrite(r"F:\PyCharm\Camera_calibration_GIT\class5\0" + str(index) + ".jpg", frame_copy)
@@ -192,6 +201,8 @@ while (flag):
         print("-------------------------")
         index += 1
     elif k == ord('q'):  # 按下q键，程序退出
+        print('数据数：',len(Distance_1),'solution1:',np.mean(Distance_1),'solution2:',np.mean(Distance_2))
+        print('标准差1：',np.std(Distance_1),'标准差2：',np.std(Distance_2))
         break
 cap.release()
 cv.destroyAllWindows()
